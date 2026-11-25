@@ -9,7 +9,7 @@ The CEO builds this project from an iPhone using Claude Code cloud sessions and 
 - After work: summarize what changed, show test results, and push a branch / open a PR. Never push directly to `main`.
 
 ## Source of truth
-1. `docs/AI_OFFICE_Architecture_Build_Plan.pdf` (if present) — the CEO's architecture and build plan.
+1. `docs/AI OFFICE — Architecture & Build Plan.pdf` — the CEO's architecture and 13-phase build plan (Phase 0–12).
 2. This file and `docs/architecture.md`.
 If they conflict, stop and ask the CEO.
 
@@ -47,12 +47,22 @@ npm run typecheck   # TypeScript
 npm test            # Vitest — all tests must pass
 npm run demo        # full pipeline with a fake AI
 npm run check       # lint + typecheck + test
+npm run build       # build the web app (Next.js)
+npm run dev         # run the web app locally
 ```
 
 ## How to work on one agent
 - Use the matching builder subagent in `.claude/agents/` (for example `copywriter-builder`). It must only touch that agent's folder.
 - Changes to `src/core/**`, `src/ceo/**`, `src/publishing/**` or the safety/architecture tests need the CEO's explicit approval in Plan mode.
 
+## Web app (Phase 1)
+- Next.js (App Router) + Tailwind CSS + shadcn/ui, installable on iPhone as a PWA.
+- Lives next to `src/`: `app/` (screens, `manifest.ts`), `components/`, `lib/`, `public/icons/`.
+- Uses its own TypeScript settings in `tsconfig.app.json`. Do not change `tsconfig.json` without the CEO's approval.
+- The web app must not import `src/` (agents, CEO inbox, publishing, office) until a later phase allows it. `tests/pwa.test.ts` checks this.
+
 ## Current stage
-Scaffold: fake AI client, fake metrics, in-memory board. **No real AI calls, no Instagram connection, no publishing.**
-Next steps (each needs CEO approval): real AI client → persistent board (PostgreSQL) → CEO web inbox with login → Instagram metrics → (much later, only on explicit CEO request) publishing.
+Following the PDF build plan. **Phase 1 — empty app on iPhone:** code ready; the iPhone "Add to Home Screen" check waits for the Vercel account.
+The agent logic in `src/` is a head start for later phases: fake AI client, fake metrics, in-memory board. **No real AI calls, no Instagram connection, no publishing.**
+Next phases, in the PDF's order (each needs CEO approval and starts only after the previous one passes): Phase 2 login (Supabase + Face ID passkey) → Phase 3 database and locks → Phase 4 screens with fake data → Phase 5 agent engine + Strategist → … → Phase 10 Instagram (dry run first) → Phase 11 Analyst → Phase 12 polish and launch.
+Phase 0 items still open: Vercel account, Brand Book.
