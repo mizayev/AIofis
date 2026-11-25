@@ -6,3 +6,10 @@ coverage/
 !.env.example
 .DS_Store
 *.log
+
+# Next.js web app
+.next/
+out/
+.vercel
+next-env.d.ts
+*.tsbuildinfo
